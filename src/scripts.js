@@ -14,7 +14,8 @@ let favButton = document.querySelector('.view-favorites');
 let homeButton = document.querySelector('.home')
 let searchButton = document.querySelector('.search-button');
 let inputSearch = document.querySelector('.search-input');
-// let searchInputTxt = document.querySelector('.searchInputTxt');
+let checkBoxes = document.querySelectorAll("input[type=checkbox]");
+let submitTagsButton = document.querySelector('#submitTagsButton');
 let cardArea = document.querySelector('.all-cards');
 let cookbook = new Cookbook(recipeData);
 let user, pantry;
@@ -23,7 +24,9 @@ window.onload = onStartup();
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
+submitTagsButton.addEventListener('click', searchByTags);
 favButton.addEventListener('click', viewFavorites);
+// This event listener work as a event bubbling
 cardArea.addEventListener('click', cardButtonConditionals);
 
 // Functions
@@ -42,11 +45,29 @@ function searchByNameIng() {
 
 
 
+
+function searchByTags() {
+  preventDefault()
+  let checkBoxMatches = [];
+  checkBoxes.forEach(checkBox => {
+    if (checkBox.checked) {
+      checkBoxMatches.push(checkBox.value)
+    }
+  })
+
+  const tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+  populateCards(tagMatches);
+}
+
+
+
+
+
 function onStartup() {
   let userId = (Math.floor(Math.random() * 49) + 1)
   let newUser = users.find(user => {
     return user.id === Number(userId);
-  });
+  }); // rather than userId === newUser.id
   user = new User(userId, newUser.name, newUser.pantry)
   pantry = new Pantry(newUser.pantry)
   populateCards(cookbook.recipes);
