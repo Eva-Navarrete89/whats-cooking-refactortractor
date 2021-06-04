@@ -110,6 +110,7 @@ function greetUser() {
   const userName = document.querySelector('.user-name');
   userName.innerHTML =
   user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
+// Could be a <p> tags and just supply it rather than this complex (.spli())
 }
 
 function favoriteCard(event) {
