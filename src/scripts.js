@@ -12,6 +12,9 @@ import Cookbook from './cookbook';
 
 let favButton = document.querySelector('.view-favorites');
 let homeButton = document.querySelector('.home')
+let searchButton = document.querySelector('.search-button');
+let inputSearch = document.querySelector('.search-input');
+// let searchInputTxt = document.querySelector('.searchInputTxt');
 let cardArea = document.querySelector('.all-cards');
 let cookbook = new Cookbook(recipeData);
 let user, pantry;
@@ -19,8 +22,25 @@ let user, pantry;
 window.onload = onStartup();
 
 homeButton.addEventListener('click', cardButtonConditionals);
+searchButton.addEventListener('click', searchByNameIng);
 favButton.addEventListener('click', viewFavorites);
 cardArea.addEventListener('click', cardButtonConditionals);
+
+// Functions
+
+function preventDefault() {
+  event.preventDefault()
+}
+
+
+function searchByNameIng() {
+  preventDefault()
+  const searchText = cookbook.findRecipe(inputSearch.value);
+  console.log(searchText);
+  populateCards(searchText);
+}
+
+
 
 function onStartup() {
   let userId = (Math.floor(Math.random() * 49) + 1)
@@ -107,6 +127,7 @@ function displayDirections(event) {
   })
   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
   let cost = recipeObject.calculateCost()
+  let returnInstructions = recipeObject.findInstructions();
   let costInDollars = (cost / 100).toFixed(2)
   cardArea.classList.add('all');
   cardArea.innerHTML = `<h3>${recipeObject.name}</h3>

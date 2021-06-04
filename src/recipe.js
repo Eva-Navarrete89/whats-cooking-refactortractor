@@ -20,6 +20,9 @@ class Recipe {
     });
     return costCounter;
   }
+  findInstructions() {
+    return this.instructions;
+  }
 
 }
 
