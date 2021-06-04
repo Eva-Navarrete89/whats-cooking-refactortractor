@@ -4,6 +4,7 @@ import './css/styles.scss';
 import recipeData from './data/recipes';
 import ingredientsData from './data/ingredients';
 import users from './data/users';
+import { fetchApiCalls } from './apiCalls'
 
 import Pantry from './pantry';
 import Recipe from './recipe';
@@ -17,6 +18,13 @@ let cookbook = new Cookbook(recipeData);
 let user, pantry;
 
 window.onload = onStartup();
+function generateNewUser() {
+  fetchApiCalls('recipes').then(data => {
+    console.log(data)
+    console.log('hello')
+  })
+}
+window.addEventListener('load', generateNewUser)
 
 homeButton.addEventListener('click', cardButtonConditionals);
 favButton.addEventListener('click', viewFavorites);
@@ -32,6 +40,14 @@ function onStartup() {
   populateCards(cookbook.recipes);
   greetUser();
 }
+
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log('hello')
+//   })
+// }
+// window.addEventListener('load', generateNewUser)
 
 function viewFavorites() {
   if (cardArea.classList.contains('all')) {
