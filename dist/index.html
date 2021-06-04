@@ -6,7 +6,6 @@
   <title>Whats Cookin</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800&display=swap' rel='stylesheet'>
 </head>
-
 <body>
   <header class='main-header'>
     <h1>What's Cookin'</h1>
@@ -15,16 +14,66 @@
     <button id='home-button' class='home navButton'>Home</button>
     <label for='view-favorites-button' class='hidden'>View favorites</label>
     <button id='view-favorites-button' class=' view-favorites navButton'>View Favorites</button>
-    <!-- <form class='search-bar'>
-        <label for='search-button' class='hidden'>Click here to search here</label>
-        <button id='search-button' class='search-button'>
-          <img class='search-image' src='https://image.flaticon.com/icons/svg/660/660029.svg' alt='Search button'>
-        </button>
-        <label for='search-input' class='hidden'>Type search query here</label>
-        <input id='search-input' class='search-input' type='text' placeholder='Search recipes by name or ingredients' value=''>
-      </form> -->
+    <form class='search-bar'>
+      <label for='search-button' class='hidden'>Click here to search here</label>
+      <button id='search-button' class='search-button'>
+        <img class='search-image' src='https://image.flaticon.com/icons/svg/660/660029.svg' alt='Search button'>
+      </button>
+      <label for='search-input' class='hidden'>Type search query here</label>
+      <input id='search-input' class='search-input' type='text' placeholder='Search recipes by name or ingredients' value=''>
+      </form>
   </header>
   <main>
+    <section id="tagsView">
+      <form class="tag-selection">
+       <div class="checkbox">
+         <div>
+           <input type="checkbox" name="tags" value="antipasti" id="antipastiTag">Antipasti</input>
+           <input type="checkbox" name="tags" value="starter" id="starterTag">Starter</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="snack" id="snackTag">Snack</input>
+           <input type="checkbox" name="tags" value="appetizer" id="appetizerTag">Appetizer</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="antipasto" id="antipastoTag">Antipasto</input>
+           <input type="checkbox" name="tags" value="hor d'oeuvre" id="horDoeuvreTag">Hor d'oeuvre</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="lunch" id="lunchTag">Lunch</input>
+           <input type="checkbox" name="tags" value="main course" id="mainCourseTag">Main Course</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="main dish" id="mainDishTag">Main Dish</input>
+           <input type="checkbox" name="tags" value="dinner" id="dinnerTag">Dinner</input>
+         </div>
+       </div>
+       <div class="checkbox">
+         <div>
+           <input type="checkbox" name="tags" value="sauce" id="sauceTag">Sauce</input>
+           <input type="checkbox" name="tags" value="side dish" id="sideDishTag">Side Dish</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="brunch" id="brunchTag">Brunch</input>
+           <input type="checkbox" name="tags" value="morning meal" id="morningMealTag">Morning Meal</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="salad" id="saladTag">Salad</input>
+           <input type="checkbox" name="tags" value="breakfast" id="breakfastTag">Breakfast</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="spread" id="spreadTag">Spread</input>
+           <input type="checkbox" name="tags" value="dip" id="dipTag">Dip</input>
+         </div>
+         <div>
+           <input type="checkbox" name="tags" value="condiment" id="condimentTag">Condiment</input>
+         </div>
+       </div>
+       <div class="submit">
+         <button type="submit" value="search" id="submitTagsButton">search</button>
+       </div>
+      </form>
+    </section>
     <section class='all-cards'>
     </section>
   </main>

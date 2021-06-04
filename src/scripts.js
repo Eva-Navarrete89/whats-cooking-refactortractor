@@ -13,6 +13,10 @@ import Cookbook from './cookbook';
 
 let favButton = document.querySelector('.view-favorites');
 let homeButton = document.querySelector('.home')
+let searchButton = document.querySelector('.search-button');
+let inputSearch = document.querySelector('.search-input');
+let checkBoxes = document.querySelectorAll("input[type=checkbox]");
+let submitTagsButton = document.querySelector('#submitTagsButton');
 let cardArea = document.querySelector('.all-cards');
 let cookbook = new Cookbook(recipeData);
 let user, pantry;
@@ -27,14 +31,51 @@ function generateNewUser() {
 window.addEventListener('load', generateNewUser)
 
 homeButton.addEventListener('click', cardButtonConditionals);
+searchButton.addEventListener('click', searchByNameIng);
+submitTagsButton.addEventListener('click', searchByTags);
 favButton.addEventListener('click', viewFavorites);
+// This event listener work as a event bubbling
 cardArea.addEventListener('click', cardButtonConditionals);
+
+// Functions
+
+function preventDefault() {
+  event.preventDefault()
+}
+
+
+function searchByNameIng() {
+  preventDefault()
+  const searchText = cookbook.findRecipe(inputSearch.value);
+  console.log(searchText);
+  populateCards(searchText);
+}
+
+
+
+
+function searchByTags() {
+  preventDefault()
+  let checkBoxMatches = [];
+  checkBoxes.forEach(checkBox => {
+    if (checkBox.checked) {
+      checkBoxMatches.push(checkBox.value)
+    }
+  })
+
+  const tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+  populateCards(tagMatches);
+}
+
+
+
+
 
 function onStartup() {
   let userId = (Math.floor(Math.random() * 49) + 1)
   let newUser = users.find(user => {
     return user.id === Number(userId);
-  });
+  }); // rather than userId === newUser.id
   user = new User(userId, newUser.name, newUser.pantry)
   pantry = new Pantry(newUser.pantry)
   populateCards(cookbook.recipes);
@@ -85,6 +126,7 @@ function greetUser() {
   const userName = document.querySelector('.user-name');
   userName.innerHTML =
   user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
+// Could be a <p> tags and just supply it rather than this complex (.spli())
 }
 
 function favoriteCard(event) {
@@ -123,6 +165,7 @@ function displayDirections(event) {
   })
   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
   let cost = recipeObject.calculateCost()
+  let returnInstructions = recipeObject.findInstructions();
   let costInDollars = (cost / 100).toFixed(2)
   cardArea.classList.add('all');
   cardArea.innerHTML = `<h3>${recipeObject.name}</h3>
