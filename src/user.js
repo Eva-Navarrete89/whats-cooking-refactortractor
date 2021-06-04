@@ -1,14 +1,13 @@
 import Search from './search';
 
 class User extends Search {
-  constructor(id, name, pantry) {
+  constructor(userData) {
     super();
-    this.id = id;
-    this.name = name;
-    this.pantry = pantry;
+    this.id = userData.id;
+    this.name = userData.name;
+    this.pantry = userData.pantry;
     this.favoriteRecipes = [];
     this.recipesToCook = []; 
-
   }
 
   addToFavorites(recipe) {
