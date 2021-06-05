@@ -1,10 +1,13 @@
-class User {
-  constructor(id, name, pantry) {
-    this.id = id;
-    this.name = name;
-    this.pantry = pantry;
-    this.favoriteRecipes = [];
+import Search from './search';
 
+class User extends Search {
+  constructor(userData) {
+    super();
+    this.id = userData.id;
+    this.name = userData.name;
+    this.pantry = userData.pantry;
+    this.favoriteRecipes = [];
+    this.recipesToCook = []; 
   }
 
   addToFavorites(recipe) {
@@ -24,11 +27,12 @@ class User {
     });
   }
 
-  findFavorites(strgToSrch) {
+  findFavorites(dishNameorIngredient) {
+    let lowerCaseSearch = dishNameorIngredient.toLowerCase();
     return this.favoriteRecipes.filter(recipe => {
-      return recipe.name.includes(strgToSrch)
+      return recipe.name.includes(lowerCaseSearch)
       || recipe.ingredients.find(ingredient => {
-        return ingredient.name.includes(strgToSrch)
+        return ingredient.name.includes(lowerCaseSearch)
       });
     });
   }

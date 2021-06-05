@@ -2,25 +2,27 @@ import { expect } from 'chai';
 
 import User from '../src/user.js';
 import recipeData from '../src/data/recipes.js'
+import usersData from '../src/data/users';
 
 let user1
 
 describe('User', () => {
   beforeEach(() => {
-    user1 = new User(1, 'Boba', [
-      {
-        'ingredient': 1077,
-        'amount': 1
-      },
-      {
-        'ingredient': 14412,
-        'amount': 1
-      },
-      {
-        'ingredient': 1009054,
-        'amount': 3
-      }]
-    );
+    user1 = new User(usersData[0])
+  });
+
+  it('should be a function', () => {
+    expect(User).to.be.a('function');
+  });
+
+  it('should create new instances of User', () => {
+    expect(user1).to.be.an.instanceof(User);
+  });
+
+  it('should have a name, id, and pantry when initialized', () => {
+    expect(user1.name).to.equal(usersData[0].name);
+    expect(user1.id).to.equal(usersData[0].id);
+    expect(user1.pantry).to.deep.equal(usersData[0].pantry);
   });
 
   it('Should have a property of favoriteRecipes with a default value', () => {
