@@ -79,7 +79,7 @@ function onStartup() {
   generateUser()
   pantry = new Pantry(users.pantry)
   populateCards(cookbook.recipes);
-  greetUser();
+  domUpdates.displayGreetUser(user);
 }
 
 function generateUser() {
@@ -113,7 +113,7 @@ function generateUser() {
 // }
 
 function viewFavorites() {
-  domViewFavorites(user);
+  domUpdates.displayFavorites(user, cardArea, favButton, populateCards, cookbook);
   // if (cardArea.classList.contains('all')) {
   //   cardArea.classList.remove('all')
   // }
@@ -145,12 +145,16 @@ function viewFavorites() {
   // }
 }
 
-function greetUser() {
-  const userName = document.querySelector('.user-name');
-  userName.innerHTML =
-  user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
+// function greetUser() {
+//   domUpdates.displayGreetUser(user);
+  // const userName = document.querySelector('.user-name');
+  // userName.innerHTML =
+  // user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
+  // // console.log('split1',user.name.split(' ')[0]);
+  // // console.log('slipt2', user.name.split(' ')[1][0]);
+  // console.log(user.name);
 // Could be a <p> tags and just supply it rather than this complex (.spli())
-}
+// }
 
 function favoriteCard(event) {
   let specificRecipe = cookbook.recipes.find(recipe => {

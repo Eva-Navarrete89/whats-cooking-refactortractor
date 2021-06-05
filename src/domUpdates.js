@@ -1,5 +1,5 @@
 let domUpdates = {
-  domViewFavorites(currentUser){
+  displayFavorites(currentUser, cardArea, favButton, populateCards, cookbook){
     if (cardArea.classList.contains('all')) {
       cardArea.classList.remove('all')
     }
@@ -30,8 +30,11 @@ let domUpdates = {
       })
     }
   },
-  updateDomMethod2(){
-
+  
+  displayGreetUser(user){
+    const userName = document.querySelector('.user-name');
+    userName.innerHTML =
+    user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
   },
 
 };
