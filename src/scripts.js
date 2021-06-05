@@ -19,6 +19,7 @@ let checkBoxes = document.querySelectorAll("input[type=checkbox]");
 let submitTagsButton = document.querySelector('#submitTagsButton');
 let cardArea = document.querySelector('.all-cards');
 let cookbook = new Cookbook(recipeData);
+
 let user, pantry;
 
 window.onload = onStartup();
@@ -67,28 +68,42 @@ function searchByTags() {
   populateCards(tagMatches);
 }
 
-
-
-
-
 function onStartup() {
-  let userId = (Math.floor(Math.random() * 49) + 1)
-  let newUser = users.find(user => {
-    return user.id === Number(userId);
-  }); // rather than userId === newUser.id
-  user = new User(userId, newUser.name, newUser.pantry)
-  pantry = new Pantry(newUser.pantry)
+  generateUser()
+  pantry = new Pantry(user.pantry)
   populateCards(cookbook.recipes);
   greetUser();
 }
 
+function generateUser() {
+  const randomUserNum = Math.floor(Math.random() * users.length);
+  let matchingUser = users.find((item) => {
+    if (item.id === randomUserNum) {
+      return item;
+    }
+  })
+  user = new User(matchingUser);
+}
+
+// YE OLD CRAPPY CODE THANK YOU 
+// function onStartup() {
+//   let userId = (Math.floor(Math.random() * 49) + 1)
+//   let newUser = users.find(user => {
+//     return user.id === Number(userId);
+//   }); // rather than userId === newUser.id
+//   user = new User(userId, newUser.name, newUser.pantry)
+//   pantry = new Pantry(newUser.pantry)
+//   populateCards(cookbook.recipes);
+//   greetUser();
+// }
+
+//FETCH CALLS
 // function generateNewUser() {
 //   fetchApiCalls('users').then(data => {
 //     console.log(data)
 //     console.log('hello')
 //   })
 // }
-// window.addEventListener('load', generateNewUser)
 
 function viewFavorites() {
   if (cardArea.classList.contains('all')) {
