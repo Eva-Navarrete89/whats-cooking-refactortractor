@@ -156,20 +156,21 @@ function viewFavorites() {
 // Could be a <p> tags and just supply it rather than this complex (.spli())
 // }
 
-function favoriteCard(event) {
-  let specificRecipe = cookbook.recipes.find(recipe => {
-    if (recipe.id  === Number(event.target.id)) {
-      return recipe;
-    }
-  })
-  if (!event.target.classList.contains('favorite-active')) {
-    event.target.classList.add('favorite-active');
-    favButton.innerHTML = 'View Favorites';
-    user.addToFavorites(specificRecipe);
-  } else if (event.target.classList.contains('favorite-active')) {
-    event.target.classList.remove('favorite-active');
-    user.removeFromFavorites(specificRecipe)
-  }
+function favoriteCard() {
+  domUpdates.displayFavoriteCard(event, cookbook, favButton, user);
+  // let specificRecipe = cookbook.recipes.find(recipe => {
+  //   if (recipe.id  === Number(event.target.id)) {
+  //     return recipe;
+  //   }
+  // })
+  // if (!event.target.classList.contains('favorite-active')) {
+  //   event.target.classList.add('favorite-active');
+  //   favButton.innerHTML = 'View Favorites';
+  //   user.addToFavorites(specificRecipe);
+  // } else if (event.target.classList.contains('favorite-active')) {
+  //   event.target.classList.remove('favorite-active');
+  //   user.removeFromFavorites(specificRecipe)
+  // }
 }
 
 function cardButtonConditionals(event) {
