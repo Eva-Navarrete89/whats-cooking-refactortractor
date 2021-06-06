@@ -173,15 +173,16 @@ function favoriteCard() {
   // }
 }
 
-function cardButtonConditionals(event) {
-  if (event.target.classList.contains('favorite')) {
-    favoriteCard(event);
-  } else if (event.target.classList.contains('card-picture')) {
-    displayDirections(event);
-  } else if (event.target.classList.contains('home')) {
-    favButton.innerHTML = 'View Favorites';
-    populateCards(cookbook.recipes);
-  }
+function cardButtonConditionals() {
+  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections);
+  // if (event.target.classList.contains('favorite')) {
+  //   favoriteCard(event);
+  // } else if (event.target.classList.contains('card-picture')) {
+  //   displayDirections(event);
+  // } else if (event.target.classList.contains('home')) {
+  //   favButton.innerHTML = 'View Favorites';
+  //   populateCards(cookbook.recipes);
+  // }
 }
 
 
