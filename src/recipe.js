@@ -31,7 +31,7 @@ class Recipe {
 
   calculateCost() {
     let costCounter = 0;
-    // refactor this after WE are badasses and have full functionality on page. ----->reduce!  
+    // refactor this after WE are badasses and have full functionality on page. ----->reduce!
     this.ingredients.forEach(ingredient => {
       this.ingredientsData.find(specificIngredient => {
         if (specificIngredient.id === ingredient.id) {
