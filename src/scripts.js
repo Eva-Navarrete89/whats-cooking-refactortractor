@@ -50,9 +50,19 @@ function preventDefault() {
 
 function searchByNameIng() {
   preventDefault()
-  // if() {
+  if (cardArea.classList.contains('all')) {
     const searchText = cookbook.findRecipe(inputSearch.value);
     populateCards(searchText);
+    populateCards(tagMatches);
+  } else {
+    const searchTextFav = user.findFavorites(inputSearch.value);
+    populateCards(searchTextFav);
+  }
+
+
+  // if() {
+    // const searchText = cookbook.findRecipe(inputSearch.value);
+    // populateCards(searchText);
   // } else {
     // const searchTextFav = user.findFavorites(inputSearch.value);
     // populateCards(searchTextFav);
@@ -87,34 +97,20 @@ function searchByNameIng() {
 function searchByFavTags() {
   preventDefault()
   let checkBoxMatches = [];
-
-  const tagMatch = user.favoriteRecipes;
-  console.log('favUserRecipes', tagMatch)
-
   checkBoxes.forEach(checkBox => {
     if (checkBox.checked) {
       checkBoxMatches.push(checkBox.value)
     }
   })
-
-  // console.log(checkBoxMatches);
-  let tagMatches = user.filterFavorites(checkBoxMatches);
-  console.log(tagMatches);
-  populateCards(tagMatches);
-
-
-
-
-
-  // preventDefault()
-  //   let checkBoxMatches = [];
-  //   checkBoxes.forEach(checkBox => {
-  //     if (checkBox.checked) {
-  //       checkBoxMatches.push(checkBox.value)
-  //     }
-  //   })
-  //   let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
-  //   populateCards(tagMatches);
+// How to say, if the favorite Recipes BTN is active, run user.filterFavorites(checkBoxMatches); ?????
+  if (!cardArea.classList.contains('all')) {
+    let tagMatches = user.filterFavorites(checkBoxMatches);
+    // console.log(tagMatches);
+    populateCards(tagMatches);
+  } else {
+    let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+    populateCards(tagMatches);
+  }
 
 }
 
