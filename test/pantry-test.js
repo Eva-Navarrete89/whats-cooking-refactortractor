@@ -1,14 +1,13 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const Pantry = require('../src/Pantry');
-const users = require('../data/users');
-const recipes = require('../data/recipes');
+import Pantry from '../src/pantry';
+import users from '../src/data/users';
+import recipeData from '../src/data/recipes';
 
 describe('Pantry', () => {
     let pantry;
-
-    beforeEach('Pantry', () => {
+    beforeEach(() => {
         pantry = new Pantry(users[0].pantry)
     })
 
@@ -20,15 +19,23 @@ describe('Pantry', () => {
         expect(pantry).to.be.an.instanceOf(Pantry);
     })
 
-    it('should have an array of user ingredients', function() => {
+    it('should have an array of user ingredients', () => {
         expect(pantry.contents[0].ingredient).to.equal(11477);
     })
 
     it('should check if user has enough ingredients for a recipe', () => {
-        let sampleRecipe = recipes[0];
-        let canMake = pantry.checkCanCookRecipe(sampleRecipe);
+        let sampleRecipe = recipeData[0];
+        let canMake = pantry.checkCanMakeRecipe(sampleRecipe);
         let failResponse = "Sorry, you don't have all the ingredients needed!"
 
         expect(canMake).to.equal(failResponse);
+    })
+
+    it.only('should return what ingredients are still needed and their amount', () => {
+        let sampleRecipe = recipeData[0]
+        let missingIngredients = pantry.findIngredientsNecessary(sampleRecipe);
+        let ingredients = {"1012047": 24, "10019903": 2};
+
+        expect(missingIngredients).to.deep.equal(ingredients);    
     })
 })
