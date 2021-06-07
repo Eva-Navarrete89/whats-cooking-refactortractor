@@ -24,12 +24,6 @@ let cookbook = new Cookbook(recipeData);
 
 let user, pantry;
 
-// console.log('YO',users);
-// console.log('recipeData', recipeData);
-// console.log('ingredientsData', ingredientsData);
-// console.log('');
-
-
 window.onload = onStartup();
 window.addEventListener('load', generateNewUser)
 
@@ -57,14 +51,14 @@ function preventDefault() {
 
 function searchByNameIng() {
   preventDefault()
-  if (!cardArea.classList.contains('all')) {
-    const searchText = cookbook.findRecipe(inputSearch.value);
-    populateCards(searchText);
-    // populateCards(tagMatches);
-  } else {
+  // if (!cardArea.classList.contains('all')) {
+  //   const searchText = cookbook.findRecipe(inputSearch.value);
+  //   populateCards(searchText);
+  //   // populateCards(tagMatches);
+  // } else {
     const searchTextFav = user.findFavorites(inputSearch.value);
     populateCards(searchTextFav);
-  }
+  // }
 }
 
 
@@ -79,32 +73,13 @@ function searchByTags() {
       checkBoxMatches.push(checkBox.value)
     }
   })
-  if (!cardArea.classList.contains('all')) {
-    let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
-    populateCards(tagMatches);
-
-  }
+  // if (!cardArea.classList.contains('all')) {
+  //   let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+  //   populateCards(tagMatches);
+  // }
+  let tagMatches = user.filterFavorites(checkBoxMatches);
+     populateCards(tagMatches);
 }
-
-
-
-/////////////////////////////////////////////
-function searchFavByTags() {
-  preventDefault()
-  let checkBoxMatches = [];
-  checkBoxes.forEach(checkBox => {
-    if (checkBox.checked) {
-      checkBoxMatches.push(checkBox.value)
-    }
-  })
-  if (!cardArea.classList.contains('view-favorites')) {
-    let tagMatches = user.filterFavorites(checkBoxMatches);
-    populateCards(tagMatches);
-    // populateCards(tagMatches);
-  }
-}
-
-
 
 
 function onStartup() {
@@ -279,7 +254,7 @@ function getFavorites() {
 function getRecipesToCook() {
   if (user.recipesToCook.length) {
     user.recipesToCook.forEach(recipe => {
-      document.querySelector('.add-button').classList.add('favorite-active')
+      document.querySelector(`.card${recipe.id}`).classList.remove('card-button')
     })
   } else return
 }
@@ -294,7 +269,7 @@ function populateCards(recipes) {
     class='card'>
         <header id='${recipe.id}' class='card-header'>
           <label for='add-button' class='hidden'>Click to add recipe</label>
-          <button id='${recipe.id}' aria-label='add-button' class='add-button card-button'>
+          <button id='${recipe.id}' aria-label='add-button' class='add-button card${recipe.id} card-button'>
             <img id='${recipe.id} favorite' class='add'
             src='https://image.flaticon.com/icons/svg/32/32339.svg' alt='Add to
             recipes to cook'>
