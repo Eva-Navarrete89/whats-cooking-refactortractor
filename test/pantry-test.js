@@ -36,10 +36,10 @@ describe('Pantry', () => {
         let neededIngredients = pantry.findIngredientsNecessary(sampleRecipe);
         let ingredients = {"1123": 1, "1145": 0.5, "2047": 0.5, "2050": 0.5, "18372": 0.5, "19206": 3, "19334": 0.5, "19335": 0.5, "20081": 1.5, "1012047": 24, "10019903": 2};
 
-        expect(neededIngredients).to.deep.equal(ingredients);    
+        expect(neededIngredients).to.deep.equal(ingredients);
     })
 
-    it.only('should tell a user what ingredients are needed', () => {
+    it('should tell a user what ingredients are needed', () => {
         let sampleRecipe = recipeData[0]
         let missingIngredients = pantry.determineMissingIngredients(sampleRecipe);
 

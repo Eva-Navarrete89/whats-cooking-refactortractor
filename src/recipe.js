@@ -7,6 +7,7 @@ class Recipe {
     this.ingredients = recipe.ingredients;
     this.instructions = recipe.instructions;
     this.ingredientsData = ingredientData;
+    this.ingredientCost = 0;
 
     // console.log('jnddkbvldj', recipe.ingredients);
     // console.log('yo', recipe);
@@ -31,7 +32,7 @@ class Recipe {
 
   calculateCost() {
     let costCounter = 0;
-    // refactor this after WE are badasses and have full functionality on page. ----->reduce!  
+    // refactor this after WE are badasses and have full functionality on page. ----->reduce!
     this.ingredients.forEach(ingredient => {
       this.ingredientsData.find(specificIngredient => {
         if (specificIngredient.id === ingredient.id) {
@@ -42,9 +43,9 @@ class Recipe {
     });
     return costCounter;
   }
-  findInstructions() {
-    return this.instructions;
-  }
+  // findInstructions() {
+  //   return this.instructions;
+  // }
 
 }
 
