@@ -11,7 +11,7 @@ class Pantry {
     return ingredientsNeeded;
   }
 
-  addMissingIngredients(ingredientsNeeded) {
+  addNecessaryIngredients(ingredientsNeeded) {
     const keysData = Object.keys(ingredientsNeeded);
     return this.contents.forEach(ingredient => {
       if(keysData.includes(ingredient.ingredient.toString())) {
@@ -22,7 +22,7 @@ class Pantry {
 
   checkCanMakeRecipe(recipe) {
     let ingredientsNeeded = this.findIngredientsNecessary(recipe);
-    this.addMissingIngredients(ingredientsNeeded);
+    this.addNecessaryIngredients(ingredientsNeeded);
     const matchedIngredients = Object.values(ingredientsNeeded).map(amount => {
       return amount < 0;
     })
@@ -33,7 +33,19 @@ class Pantry {
     }
   }
 
-  
+  determineMissingIngredients(recipe) {
+    let ingredientsNeeded = this.findIngredientsNecessary(recipe);
+    this.addNecessaryIngredients(ingredientsNeeded);
+    let toBuy = {};
+    Object.entries(ingredientsNeeded).forEach(([id, amount]) => {
+      if (amount > 0) {
+        toBuy[id] = amount;
+      }
+    })
+    return toBuy
+  }
+
+
 }
 
 export default Pantry;
