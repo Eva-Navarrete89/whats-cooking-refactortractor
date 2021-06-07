@@ -1,6 +1,7 @@
 import './css/base.scss';
 import './css/styles.scss';
 
+import domUpdates from './domUpdates';
 import recipeData from './data/recipes';
 import ingredientsData from './data/ingredients';
 import users from './data/users';
@@ -23,21 +24,27 @@ let cookbook = new Cookbook(recipeData);
 
 let user, pantry;
 
+// console.log('YO',users);
+// console.log('recipeData', recipeData);
+// console.log('ingredientsData', ingredientsData);
+// console.log('');
+
+
 window.onload = onStartup();
 window.addEventListener('load', generateNewUser)
 
-function generateNewUser() {
-  fetchApiCalls('users').then(data => {
-    console.log(data)
-    console.log('hello')
-  })
-}
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log(user)
+//   })
+// }
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
 submitTagsButton.addEventListener('click', searchByTags);
 favButton.addEventListener('click', viewFavorites);
-toCookButton.addEventListener('click', viewToCook);
+toCookButton.addEventListener('click', viewRecipesToCook);
 // This event listener work as a event bubbling
 cardArea.addEventListener('click', cardButtonConditionals);
 
@@ -62,13 +69,13 @@ function searchByNameIng() {
 
 
 
-
-function searchFavByNameIng() {
-  preventDefault()
-    const searchTextFav = user.findFavorites(inputSearch.value);
-    populateCards(searchTextFav);
-
-}
+// TEST and DELETE IT
+// function searchFavByNameIng() {
+//   preventDefault()
+//     const searchTextFav = user.findFavorites(inputSearch.value);
+//     populateCards(searchTextFav);
+//
+// }
 
 
 
@@ -82,12 +89,6 @@ function searchByTags() {
       checkBoxMatches.push(checkBox.value)
     }
   })
-  // if (!cardArea.classList.contains('view-favorites')) {
-  //   let tagMatches = user.filterFavorites(checkBoxMatches);
-  //   populateCards(tagMatches);
-  //   // populateCards(tagMatches);
-  // }
-
   if (!cardArea.classList.contains('all')) {
     let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
     populateCards(tagMatches);
@@ -115,9 +116,9 @@ function searchFavByTags() {
 
 function onStartup() {
   generateUser()
-  pantry = new Pantry(user.pantry)
+  pantry = new Pantry(users.pantry)
   populateCards(cookbook.recipes);
-  greetUser();
+  domUpdates.displayGreetUser(user);
 }
 
 function generateUser() {
@@ -151,160 +152,88 @@ function generateUser() {
 //   })
 // }
 
+function viewFavorites() {
+  domUpdates.displayFavorites(user, cardArea, favButton, populateCards, cookbook);
 
 
-
-// View Favorites and Rec To Cook VIEW & BUTTONS
-// These functions will be trigger by event listener in "Button Click"
-function viewFavorites(event) {
-  event.preventDefault();
-
-  // Is this gonna help the function to run just when we push the buttom ??
-  // searchFavByTags();
-  if (cardArea.classList.contains('all')) {
-    cardArea.classList.remove('all')
-  }
-  if (!user.favoriteRecipes.length) {
-    favButton.innerHTML = 'You have no favorites!';
-    populateCards(cookbook.recipes);
-    return
-  } else {
-    favButton.innerHTML = 'Refresh Favorites'
-    cardArea.innerHTML = '';
-
-
-
-
-    user.favoriteRecipes.forEach(recipe => {
-      cardArea.insertAdjacentHTML('afterbegin', `<div id='${recipe.id}'
-      class='card'>
-      <header id='${recipe.id}' class='card-header'>
-      <label for='add-button' class='hidden'>Click to add recipe</label>
-      <button id='${recipe.id}' aria-label='add-button' class='add-button card-button'>
-      <img id='${recipe.id}' class='add'
-      src='https://image.flaticon.com/icons/svg/32/32339.svg' alt='Add to
-      recipes to cook'></button>
-      <label for='favorite-button' class='hidden'>Click to favorite recipe
-      </label>
-      <button id='${recipe.id}' aria-label='favorite-button' class='favorite favorite-active card-button'>
-      </button></header>
-      <span id='${recipe.id}' class='recipe-name'>${recipe.name}</span>
-      <img id='${recipe.id}' tabindex='0' class='card-picture'
-      src='${recipe.image}' alt='Food from recipe'>
-      </div>`)
-    })
-  }
+  // if (cardArea.classList.contains('all')) {
+  //   cardArea.classList.remove('all')
+  // }
+  // if (!user.favoriteRecipes.length) {
+  //   favButton.innerHTML = 'You have no favorites!';
+  //   populateCards(cookbook.recipes);
+  //   return
+  // } else {
+  //   favButton.innerHTML = 'Refresh Favorites'
+  //   cardArea.innerHTML = '';
+  //   user.favoriteRecipes.forEach(recipe => {
+  //     cardArea.insertAdjacentHTML('afterbegin', `<div id='${recipe.id}'
+  //     class='card'>
+  //     <header id='${recipe.id}' class='card-header'>
+  //     <label for='add-button' class='hidden'>Click to add recipe</label>
+  //     <button id='${recipe.id}' aria-label='add-button' class='add-button card-button'>
+  //     <img id='${recipe.id}' class='add'
+  //     src='https://image.flaticon.com/icons/svg/32/32339.svg' alt='Add to
+  //     recipes to cook'></button>
+  //     <label for='favorite-button' class='hidden'>Click to favorite recipe
+  //     </label>
+  //     <button id='${recipe.id}' aria-label='favorite-button' class='favorite favorite-active card-button'>
+  //     </button></header>
+  //     <span id='${recipe.id}' class='recipe-name'>${recipe.name}</span>
+  //     <img id='${recipe.id}' tabindex='0' class='card-picture'
+  //     src='${recipe.image}' alt='Food from recipe'>
+  //     </div>`)
+  //   })
+  // }
 }
 
-
-
-
-function viewToCook(event) {
-  event.preventDefault();
-  searchFavByNameIng()
-  if (cardArea.classList.contains('all')) {
-    cardArea.classList.remove('all')
-  }
-  if (!user.recipesToCook.length) {
-    toCookButton.innerHTML = 'No Recipes to Cook!';
-    populateCards(cookbook.recipes);
-    return
-  } else {
-    favButton.innerHTML = 'Add more recipes'
-    cardArea.innerHTML = '';
-
-
-
-
-    user.recipesToCook.forEach(recipe => {
-      cardArea.insertAdjacentHTML('afterbegin', `<div id='${recipe.id}'
-      class='card'>
-      <header id='${recipe.id}' class='card-header'>
-      <label for='add-button' class='hidden'>Click to add recipe</label>
-      <button id='${recipe.id}' aria-label='add-button' class='add-button '>
-      <img id='${recipe.id}' class='add'
-      src='https://image.flaticon.com/icons/svg/32/32339.svg' alt='Add to
-      recipes to cook'></button>
-      <label for='favorite-button' class='hidden'>Click to favorite recipe
-      </label>
-      <button id='${recipe.id}' aria-label='favorite-button' class='favorite card-button'>
-      </button></header>
-      <span id='${recipe.id}' class='recipe-name'>${recipe.name}</span>
-      <img id='${recipe.id}' tabindex='0' class='card-picture'
-      src='${recipe.image}' alt='Food from recipe'>
-      </div>`)
-    })
-  }
+// Function to display recipes to cook
+function viewRecipesToCook() {
+  dumUpdates.displayRecipesToCook(user, cardArea, toCookButton, populateCards, cookbook)
 }
 
+// function greetUser() {
+//   domUpdates.displayGreetUser(user);
+  // const userName = document.querySelector('.user-name');
+  // userName.innerHTML =
+  // user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
+  // // console.log('split1',user.name.split(' ')[0]);
+  // // console.log('slipt2', user.name.split(' ')[1][0]);
+  // console.log(user.name);
+// Could be a <p> tags and just supply it rather than this complex (.spli())
+// }
 
-
-
-/// favoriteCards() & addToCook()
-// These functions will be trigger by "cardButtonConditionals()" depending on  "cadrArea TARGET"
-
-function favoriteCard(event) {
-  let specificRecipe = cookbook.recipes.find(recipe => {
-    if (recipe.id  === Number(event.target.id)) {
-      return recipe;
-    }
-  })
-  if (!event.target.classList.contains('favorite-active')) {
-    event.target.classList.add('favorite-active');
-    favButton.innerHTML = 'View Favorites';
-    user.addToFavorites(specificRecipe);
-    console.log(user.favoriteRecipes);
-  } else if (event.target.classList.contains('favorite-active')) {
-    event.target.classList.remove('favorite-active');
-    user.removeFromFavorites(specificRecipe)
-    console.log(user.favoriteRecipes);
-  }
+function favoriteCard() {
+  domUpdates.displayFavoriteCard(event, cookbook, favButton, user);
+  // let specificRecipe = cookbook.recipes.find(recipe => {
+  //   if (recipe.id  === Number(event.target.id)) {
+  //     return recipe;
+  //   }
+  // })
+  // if (!event.target.classList.contains('favorite-active')) {
+  //   event.target.classList.add('favorite-active');
+  //   favButton.innerHTML = 'View Favorites';
+  //   user.addToFavorites(specificRecipe);
+  // } else if (event.target.classList.contains('favorite-active')) {
+  //   event.target.classList.remove('favorite-active');
+  //   user.removeFromFavorites(specificRecipe)
+  // }
 }
 
-
-function addToCook(event) {
-  let specificRecipe = cookbook.recipes.find(recipe => {
-    if (recipe.id  === Number(event.target.id)) {
-      return recipe;
-    }
-  })
-  if (event.target.classList.contains('card-button')) {
-    event.target.classList.remove('card-button');
-    // line down is extra code
-    toCookButton.innerHTML = 'Recipes to cook';
-    user.addToCookWeek(specificRecipe);
-    console.log(user.recipesToCook);
-  } else if (!event.target.classList.contains('card-button')) {
-    event.target.classList.add('card-button');
-    user.removeFromToCook(specificRecipe)
-    console.log(user.recipesToCook);
-  }
+function addToCook() {
+  domUpdates.displayRecipesToCook(event, cookbook, toCookButton, user)
 }
 
-
-
-
-
-
-function greetUser() {
-  const userName = document.querySelector('.user-name');
-  userName.innerHTML =
-  user.name.split(' ')[0] + ' ' + user.name.split(' ')[1][0];
-}
-
-
-function cardButtonConditionals(event) {
-  if (event.target.classList.contains('favorite')) {
-    favoriteCard(event);
-  } else if (event.target.classList.contains('add-button')) {
-    addToCook(event);
-  } else if (event.target.classList.contains('card-picture')) {
-    displayDirections(event);
-  } else if (event.target.classList.contains('home')) {
-    favButton.innerHTML = 'View Favorites';
-    toCookButton.innerHTML = 'Recipes to cook';
-    populateCards(cookbook.recipes);
-  }
+function cardButtonConditionals() {
+  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections);
+  // if (event.target.classList.contains('favorite')) {
+  //   favoriteCard(event);
+  // } else if (event.target.classList.contains('card-picture')) {
+  //   displayDirections(event);
+  // } else if (event.target.classList.contains('home')) {
+  //   favButton.innerHTML = 'View Favorites';
+  //   populateCards(cookbook.recipes);
+  // }
 }
 
 function displayDirections(event) {
