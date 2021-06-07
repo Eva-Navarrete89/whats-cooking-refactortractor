@@ -4,7 +4,7 @@ import './css/styles.scss';
 import domUpdates from './domUpdates';
 import recipeData from './data/recipes';
 import ingredientsData from './data/ingredients';
-import users from './data/users';
+// import users from './data/users';
 import { fetchApiCalls } from './apiCalls'
 
 import Pantry from './pantry';
@@ -13,6 +13,7 @@ import User from './user';
 import Cookbook from './cookbook';
 
 let favButton = document.querySelector('.view-favorites');
+let toCookButton = document.querySelector('.recipes-to-cook');
 let homeButton = document.querySelector('.home')
 let searchButton = document.querySelector('.search-button');
 let inputSearch = document.querySelector('.search-input');
@@ -23,25 +24,21 @@ let cookbook = new Cookbook(recipeData);
 
 let user, pantry;
 
-// console.log('YO',users);
-// console.log('recipeData', recipeData);
-// console.log('ingredientsData', ingredientsData);
-// console.log('');
+window.onload = generateUser();
+// window.addEventListener('load', generateUser);
 
-
-window.onload = onStartup();
-function generateNewUser() {
-  fetchApiCalls('recipes').then(data => {
-    console.log(data)
-    console.log(user)
-  })
-}
-window.addEventListener('load', generateNewUser)
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log(user)
+//   })
+// }
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
 submitTagsButton.addEventListener('click', searchByTags);
 favButton.addEventListener('click', viewFavorites);
+toCookButton.addEventListener('click', viewRecipesToCook);
 // This event listener work as a event bubbling
 cardArea.addEventListener('click', cardButtonConditionals);
 
@@ -54,14 +51,24 @@ function preventDefault() {
 
 function searchByNameIng() {
   preventDefault()
-  const searchText = cookbook.findRecipe(inputSearch.value);
-  console.log(searchText);
-  populateCards(searchText);
+
+  // Works for SEARCH BY ALL RECIPES
+  // if (!cardArea.classList.contains('all')) {
+  //   const searchText = cookbook.findRecipe(inputSearch.value);
+  //   populateCards(searchText);
+  // }
+
+  // Works for SEARCH BY FAVORITES
+  if (!cardArea.classList.contains('favorite')) {
+    const searchTextFav = user.findFavorites(inputSearch.value);
+    populateCards(searchTextFav);
+  }
 }
 
 
 
-
+/////////////////////////////////////////
+/// Function filter recipes by "TAGS" based on (user.favoriteRecipes)
 function searchByTags() {
   preventDefault()
   let checkBoxMatches = [];
@@ -71,25 +78,64 @@ function searchByTags() {
     }
   })
 
-  const tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
-  populateCards(tagMatches);
+  // Works for FILTER BY ALL RECIPES
+  if (!cardArea.classList.contains('all')) {
+    let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+    populateCards(tagMatches);
+  }
+
+
+
+// Works for FILTER BY FAVORITES
+  // if (!cardArea.classList.contains('all')) {
+  //   let tagMatches = user.filterFavorites(checkBoxMatches);
+  //   populateCards(tagMatches);
+  // }
+
 }
 
-function onStartup() {
-  generateUser()
-  pantry = new Pantry(users.pantry)
-  populateCards(cookbook.recipes);
-  domUpdates.displayGreetUser(user);
-}
+
+// function onStartup() {
+//   generateUser()
+//   // domUpdates.displayGreetUser(user);
+//     // pantry = new Pantry(user.pantry)
+//     // populateCards(cookbook.recipes);
+//     // domUpdates.displayGreetUser(user);
+//
+// }
+
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log(user)
+//   })
+// }
 
 function generateUser() {
-  const randomUserNum = Math.floor(Math.random() * users.length);
-  let matchingUser = users.find((item) => {
-    if (item.id === randomUserNum) {
-      return item;
-    }
+  fetchApiCalls('users')
+  .then(data => {
+    console.log('hola', data.usersData.length);
+    const randomUserNum = Math.floor(Math.random() * data.usersData.length);
+    let matchingUser = data.usersData.find((item) => {
+      if (item.id === randomUserNum) {
+        return item;
+      }
+    })
+    user = new User(matchingUser);
+    console.log(user);
+    pantry = new Pantry(user.pantry)
+    populateCards(cookbook.recipes);
+    domUpdates.displayGreetUser(user);
   })
-  user = new User(matchingUser);
+
+  // const randomUserNum = Math.floor(Math.random() * data.length);
+  // let matchingUser = data.find((item) => {
+  //   if (item.id === randomUserNum) {
+  //     return item;
+  //   }
+  // })
+  // user = new User(matchingUser);
+  // console.log(user);
 }
 
 // YE OLD CRAPPY CODE THANK YOU
@@ -104,7 +150,7 @@ function generateUser() {
 //   greetUser();
 // }
 
-//FETCH CALLS
+// FETCH CALLS
 // function generateNewUser() {
 //   fetchApiCalls('users').then(data => {
 //     console.log(data)
@@ -114,6 +160,7 @@ function generateUser() {
 
 function viewFavorites() {
   domUpdates.displayFavorites(user, cardArea, favButton, populateCards, cookbook);
+
   // if (cardArea.classList.contains('all')) {
   //   cardArea.classList.remove('all')
   // }
@@ -145,6 +192,11 @@ function viewFavorites() {
   // }
 }
 
+// Function to display recipes to cook
+function viewRecipesToCook() {
+  domUpdates.displayRecipesToCook(user, cardArea, toCookButton, populateCards, cookbook)
+}
+
 // function greetUser() {
 //   domUpdates.displayGreetUser(user);
   // const userName = document.querySelector('.user-name');
@@ -173,8 +225,12 @@ function favoriteCard() {
   // }
 }
 
+function addToCook() {
+  domUpdates.addRecipesToCook(event, cookbook, toCookButton, user)
+}
+
 function cardButtonConditionals() {
-  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections);
+  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections, addToCook);
   // if (event.target.classList.contains('favorite')) {
   //   favoriteCard(event);
   // } else if (event.target.classList.contains('card-picture')) {
@@ -185,8 +241,8 @@ function cardButtonConditionals() {
   // }
 }
 
-
 function displayDirections(event) {
+    // console.log(user);
   let newRecipeInfo = cookbook.recipes.find(recipe => {
     if (recipe.id === Number(event.target.id)) {
       return recipe;
@@ -194,8 +250,11 @@ function displayDirections(event) {
   })
   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
   let cost = recipeObject.calculateCost()
-  let returnInstructions = recipeObject.findInstructions();
   let costInDollars = (cost / 100).toFixed(2)
+  let returnInstructions = recipeObject.retrieveRecipeInstructions();
+  let returnIngredients = recipeObject.retrieveIngredientName();
+  console.log(returnIngredients, returnInstructions);
+  // What does it mean "all" ??
   cardArea.classList.add('all');
   cardArea.innerHTML = `<h3>${recipeObject.name}</h3>
   <p class='all-recipe-info'>
@@ -220,10 +279,20 @@ function displayDirections(event) {
   })
 }
 
+
+// This function helps us when we return to the main view and the cards are stil active in the main vuew, need to make the same for the recipes to cook section
 function getFavorites() {
   if (user.favoriteRecipes.length) {
     user.favoriteRecipes.forEach(recipe => {
       document.querySelector(`.favorite${recipe.id}`).classList.add('favorite-active')
+    })
+  } else return
+}
+
+function getRecipesToCook() {
+  if (user.recipesToCook.length) {
+    user.recipesToCook.forEach(recipe => {
+      document.querySelector(`.card${recipe.id}`).classList.remove('card-button')
     })
   } else return
 }
@@ -238,7 +307,7 @@ function populateCards(recipes) {
     class='card'>
         <header id='${recipe.id}' class='card-header'>
           <label for='add-button' class='hidden'>Click to add recipe</label>
-          <button id='${recipe.id}' aria-label='add-button' class='add-button card-button'>
+          <button id='${recipe.id}' aria-label='add-button' class='add-button card${recipe.id} card-button'>
             <img id='${recipe.id} favorite' class='add'
             src='https://image.flaticon.com/icons/svg/32/32339.svg' alt='Add to
             recipes to cook'>
@@ -253,4 +322,5 @@ function populateCards(recipes) {
     </div>`)
   })
   getFavorites();
+  getRecipesToCook()
 };

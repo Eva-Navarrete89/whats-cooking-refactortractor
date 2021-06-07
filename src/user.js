@@ -5,15 +5,17 @@ class User extends Search {
     super();
     this.id = userData.id;
     this.name = userData.name;
-    this.pantry = userData.pantry;//need to put this as new Pantry() but don't want to break it
+    this.pantry = userData.pantry;
     this.favoriteRecipes = [];
-    this.recipesToCook = []; 
+    this.recipesToCook = [];
   }
 
   addToFavorites(recipe) {
     if (!this.favoriteRecipes.includes(recipe)) {
       this.favoriteRecipes.push(recipe)
+      // console.log(favoriteRecipes);
     }
+    return this.favoriteRecipes
   }
 
   removeFromFavorites(recipe) {
@@ -21,10 +23,32 @@ class User extends Search {
     this.favoriteRecipes.splice(i, 1)
   }
 
-  filterFavorites(tag) {
-    return this.favoriteRecipes.filter(recipe => {
-      return recipe.tags.includes(tag);
-    });
+
+  addToCookWeek(recipe) {
+    if (!this.recipesToCook.includes(recipe)) {
+      this.recipesToCook.push(recipe)
+      // console.log(favoriteRecipes);
+    }
+    return this.recipesToCook
+  }
+
+  removeFromToCook(recipe) {
+    const i = this.recipesToCook.indexOf(recipe);
+    this.recipesToCook.splice(i, 1)
+  }
+
+
+
+  filterFavorites(tags) {
+    const favMatches = [];
+    this.favoriteRecipes.forEach(recipe => {
+      tags.forEach(tag => {
+        if (recipe.tags.includes(tag)) {
+          favMatches.push(recipe)
+        }
+      })
+    })
+      return favMatches;
   }
 
   findFavorites(dishNameorIngredient) {
