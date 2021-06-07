@@ -26,7 +26,7 @@ window.onload = onStartup();
 function generateNewUser() {
   fetchApiCalls('recipes').then(data => {
     console.log(data)
-    console.log('hello')
+    console.log(user)
   })
 }
 window.addEventListener('load', generateNewUser)

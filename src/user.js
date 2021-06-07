@@ -5,7 +5,7 @@ class User extends Search {
     super();
     this.id = userData.id;
     this.name = userData.name;
-    this.pantry = userData.pantry;
+    this.pantry = userData.pantry;//need to put this as new Pantry() but don't want to break it
     this.favoriteRecipes = [];
     this.recipesToCook = []; 
   }
