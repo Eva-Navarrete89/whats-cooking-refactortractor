@@ -4,7 +4,7 @@ import './css/styles.scss';
 import domUpdates from './domUpdates';
 import recipeData from './data/recipes';
 import ingredientsData from './data/ingredients';
-import users from './data/users';
+// import users from './data/users';
 import { fetchApiCalls } from './apiCalls'
 
 import Pantry from './pantry';
@@ -24,15 +24,15 @@ let cookbook = new Cookbook(recipeData);
 
 let user, pantry;
 
-window.onload = onStartup();
-window.addEventListener('load', generateNewUser)
+window.onload = generateUser();
+// window.addEventListener('load', generateUser);
 
-function generateNewUser() {
-  fetchApiCalls('users').then(data => {
-    console.log(data)
-    console.log(user)
-  })
-}
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log(user)
+//   })
+// }
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
@@ -51,14 +51,18 @@ function preventDefault() {
 
 function searchByNameIng() {
   preventDefault()
+
+  // Works for SEARCH BY ALL RECIPES
   // if (!cardArea.classList.contains('all')) {
   //   const searchText = cookbook.findRecipe(inputSearch.value);
   //   populateCards(searchText);
-  //   // populateCards(tagMatches);
-  // } else {
+  // }
+
+  // Works for SEARCH BY FAVORITES
+  if (!cardArea.classList.contains('favorite')) {
     const searchTextFav = user.findFavorites(inputSearch.value);
     populateCards(searchTextFav);
-  // }
+  }
 }
 
 
@@ -73,31 +77,65 @@ function searchByTags() {
       checkBoxMatches.push(checkBox.value)
     }
   })
+
+  // Works for FILTER BY ALL RECIPES
+  if (!cardArea.classList.contains('all')) {
+    let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+    populateCards(tagMatches);
+  }
+
+
+
+// Works for FILTER BY FAVORITES
   // if (!cardArea.classList.contains('all')) {
-  //   let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
+  //   let tagMatches = user.filterFavorites(checkBoxMatches);
   //   populateCards(tagMatches);
   // }
-  let tagMatches = user.filterFavorites(checkBoxMatches);
-     populateCards(tagMatches);
+
 }
 
 
-function onStartup() {
-  generateUser()
-  pantry = new Pantry(users.pantry)
-  populateCards(cookbook.recipes);
-  domUpdates.displayGreetUser(user);
-}
+// function onStartup() {
+//   generateUser()
+//   // domUpdates.displayGreetUser(user);
+//     // pantry = new Pantry(user.pantry)
+//     // populateCards(cookbook.recipes);
+//     // domUpdates.displayGreetUser(user);
+//
+// }
+
+// function generateNewUser() {
+//   fetchApiCalls('users').then(data => {
+//     console.log(data)
+//     console.log(user)
+//   })
+// }
 
 function generateUser() {
-  const randomUserNum = Math.floor(Math.random() * users.length);
-  let matchingUser = users.find((item) => {
-    if (item.id === randomUserNum) {
-      return item;
-    }
+  fetchApiCalls('users')
+  .then(data => {
+    console.log('hola', data.usersData.length);
+    const randomUserNum = Math.floor(Math.random() * data.usersData.length);
+    let matchingUser = data.usersData.find((item) => {
+      if (item.id === randomUserNum) {
+        return item;
+      }
+    })
+    user = new User(matchingUser);
+    console.log(user);
+    pantry = new Pantry(user.pantry)
+    populateCards(cookbook.recipes);
+    domUpdates.displayGreetUser(user);
   })
-  user = new User(matchingUser);
-  console.log(user);
+
+  // const randomUserNum = Math.floor(Math.random() * data.length);
+  // let matchingUser = data.find((item) => {
+  //   if (item.id === randomUserNum) {
+  //     return item;
+  //   }
+  // })
+  // user = new User(matchingUser);
+  // console.log(user);
 }
 
 // YE OLD CRAPPY CODE THANK YOU
@@ -112,7 +150,7 @@ function generateUser() {
 //   greetUser();
 // }
 
-//FETCH CALLS
+// FETCH CALLS
 // function generateNewUser() {
 //   fetchApiCalls('users').then(data => {
 //     console.log(data)
