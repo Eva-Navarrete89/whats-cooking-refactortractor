@@ -24,18 +24,18 @@ let cookbook = new Cookbook(recipeData);
 let user, pantry;
 
 window.onload = onStartup();
-// window.addEventListener('load', generateNewUser)
+window.addEventListener('load', generateNewUser)
 
-// function generateNewUser() {
-//   fetchApiCalls('recipes').then(data => {
-//     console.log(data)
-//     console.log('hello')
-//   })
-// }
+function generateNewUser() {
+  fetchApiCalls('users').then(data => {
+    console.log(data)
+    console.log('hello')
+  })
+}
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
-submitTagsButton.addEventListener('click', searchByFavTags);
+submitTagsButton.addEventListener('click', searchByTags);
 favButton.addEventListener('click', viewFavorites);
 toCookButton.addEventListener('click', viewToCook);
 // This event listener work as a event bubbling
@@ -50,51 +50,31 @@ function preventDefault() {
 
 function searchByNameIng() {
   preventDefault()
-  if (cardArea.classList.contains('all')) {
+  if (!cardArea.classList.contains('all')) {
     const searchText = cookbook.findRecipe(inputSearch.value);
     populateCards(searchText);
-    populateCards(tagMatches);
+    // populateCards(tagMatches);
   } else {
     const searchTextFav = user.findFavorites(inputSearch.value);
     populateCards(searchTextFav);
   }
-
-
-  // if() {
-    // const searchText = cookbook.findRecipe(inputSearch.value);
-    // populateCards(searchText);
-  // } else {
-    // const searchTextFav = user.findFavorites(inputSearch.value);
-    // populateCards(searchTextFav);
-  // }
 }
 
 
 
 
+function searchFavByNameIng() {
+  preventDefault()
+    const searchTextFav = user.findFavorites(inputSearch.value);
+    populateCards(searchTextFav);
 
+}
 
-
-
-/// Function filter recipes by "TAGS" based on (cookbook.recipes & user.favoriteRecipes)
-
-/// Function filter recipes by "TAGS" based on (cookbook.recipes)
-// function searchByTags() {
-//   preventDefault()
-//   let checkBoxMatches = [];
-//   checkBoxes.forEach(checkBox => {
-//     if (checkBox.checked) {
-//       checkBoxMatches.push(checkBox.value)
-//     }
-//   })
-//   let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
-//   populateCards(tagMatches);
-// }
 
 
 
 /// Function filter recipes by "TAGS" based on (user.favoriteRecipes)
-function searchByFavTags() {
+function searchByTags() {
   preventDefault()
   let checkBoxMatches = [];
   checkBoxes.forEach(checkBox => {
@@ -102,19 +82,33 @@ function searchByFavTags() {
       checkBoxMatches.push(checkBox.value)
     }
   })
-// How to say, if the favorite Recipes BTN is active, run user.filterFavorites(checkBoxMatches); ?????
+  // if (!cardArea.classList.contains('view-favorites')) {
+  //   let tagMatches = user.filterFavorites(checkBoxMatches);
+  //   populateCards(tagMatches);
+  //   // populateCards(tagMatches);
+  // }
+
   if (!cardArea.classList.contains('all')) {
-    let tagMatches = user.filterFavorites(checkBoxMatches);
-    // console.log(tagMatches);
-    populateCards(tagMatches);
-  } else {
     let tagMatches = cookbook.filterRecipesTags(checkBoxMatches);
     populateCards(tagMatches);
-  }
 
+  }
 }
 
-
+function searchFavByTags() {
+  preventDefault()
+  let checkBoxMatches = [];
+  checkBoxes.forEach(checkBox => {
+    if (checkBox.checked) {
+      checkBoxMatches.push(checkBox.value)
+    }
+  })
+  if (!cardArea.classList.contains('view-favorites')) {
+    let tagMatches = user.filterFavorites(checkBoxMatches);
+    populateCards(tagMatches);
+    // populateCards(tagMatches);
+  }
+}
 
 
 
@@ -164,6 +158,7 @@ function generateUser() {
 // These functions will be trigger by event listener in "Button Click"
 function viewFavorites(event) {
   event.preventDefault();
+
   // Is this gonna help the function to run just when we push the buttom ??
   // searchFavByTags();
   if (cardArea.classList.contains('all')) {
@@ -206,6 +201,7 @@ function viewFavorites(event) {
 
 function viewToCook(event) {
   event.preventDefault();
+  searchFavByNameIng()
   if (cardArea.classList.contains('all')) {
     cardArea.classList.remove('all')
   }
