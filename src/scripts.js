@@ -33,12 +33,12 @@ let user, pantry;
 window.onload = onStartup();
 window.addEventListener('load', generateNewUser)
 
-// function generateNewUser() {
-//   fetchApiCalls('users').then(data => {
-//     console.log(data)
-//     console.log(user)
-//   })
-// }
+function generateNewUser() {
+  fetchApiCalls('users').then(data => {
+    console.log(data)
+    console.log(user)
+  })
+}
 
 homeButton.addEventListener('click', cardButtonConditionals);
 searchButton.addEventListener('click', searchByNameIng);
@@ -69,17 +69,7 @@ function searchByNameIng() {
 
 
 
-// TEST and DELETE IT
-// function searchFavByNameIng() {
-//   preventDefault()
-//     const searchTextFav = user.findFavorites(inputSearch.value);
-//     populateCards(searchTextFav);
-//
-// }
-
-
-
-
+/////////////////////////////////////////
 /// Function filter recipes by "TAGS" based on (user.favoriteRecipes)
 function searchByTags() {
   preventDefault()
@@ -96,6 +86,9 @@ function searchByTags() {
   }
 }
 
+
+
+/////////////////////////////////////////////
 function searchFavByTags() {
   preventDefault()
   let checkBoxMatches = [];
@@ -155,7 +148,6 @@ function generateUser() {
 function viewFavorites() {
   domUpdates.displayFavorites(user, cardArea, favButton, populateCards, cookbook);
 
-
   // if (cardArea.classList.contains('all')) {
   //   cardArea.classList.remove('all')
   // }
@@ -189,7 +181,7 @@ function viewFavorites() {
 
 // Function to display recipes to cook
 function viewRecipesToCook() {
-  dumUpdates.displayRecipesToCook(user, cardArea, toCookButton, populateCards, cookbook)
+  domUpdates.displayRecipesToCook(user, cardArea, toCookButton, populateCards, cookbook)
 }
 
 // function greetUser() {
@@ -221,11 +213,11 @@ function favoriteCard() {
 }
 
 function addToCook() {
-  domUpdates.displayRecipesToCook(event, cookbook, toCookButton, user)
+  domUpdates.addRecipesToCook(event, cookbook, toCookButton, user)
 }
 
 function cardButtonConditionals() {
-  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections);
+  domUpdates.displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections, addToCook);
   // if (event.target.classList.contains('favorite')) {
   //   favoriteCard(event);
   // } else if (event.target.classList.contains('card-picture')) {
@@ -287,7 +279,7 @@ function getFavorites() {
 function getRecipesToCook() {
   if (user.recipesToCook.length) {
     user.recipesToCook.forEach(recipe => {
-      document.querySelector(`.favorite${recipe.id}`).classList.add('card-button')
+      document.querySelector('.add-button').classList.add('favorite-active')
     })
   } else return
 }

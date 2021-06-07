@@ -33,11 +33,11 @@ let domUpdates = {
 
   displayRecipesToCook(currentUser, cardArea, toCookButton, populateCards, cookbook){
     event.preventDefault();
-    searchFavByNameIng()
+    // searchFavByNameIng()
     if (cardArea.classList.contains('all')) {
       cardArea.classList.remove('all')
     }
-    if (!user.recipesToCook.length) {
+    if (!currentUser.recipesToCook.length) {
       toCookButton.innerHTML = 'No Recipes to Cook!';
       populateCards(cookbook.recipes);
       return
@@ -63,9 +63,8 @@ let domUpdates = {
       </div>`)
     })
   }
-}
+},
 
-  },
   displayGreetUser(user){
     const userName = document.querySelector('.user-name');
     userName.innerHTML =
@@ -88,7 +87,7 @@ let domUpdates = {
     }
   },
 
-  displayRecipesToCook(event, cookbook, toCookButton, currentUser) {
+  addRecipesToCook(event, cookbook, toCookButton, currentUser) {
     let specificRecipe = cookbook.recipes.find(recipe => {
     if (recipe.id  === Number(event.target.id)) {
       return recipe;
@@ -104,7 +103,7 @@ let domUpdates = {
     }
   },
 
-  displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections) {
+  displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections, addToCook) {
     if (event.target.classList.contains('favorite')) {
       favoriteCard(event);
     } else if (event.target.classList.contains('add-button')) {
