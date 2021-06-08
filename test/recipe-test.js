@@ -8,9 +8,15 @@ import ingredientData from '../src/data/ingredients.js';
 
 
 describe('Recipe', () => {
-  let recipe;
+  let recipe, ingredient;
   beforeEach(() => {
     recipe = new Recipe(recipeData[47], ingredientData);
+
+    ingredient = [{
+        "id": 10018413,
+        "name": "flatbread",
+        "estimatedCostInCents": 326
+      }];
   });
 
   it('Should be a function', () => {
@@ -115,8 +121,9 @@ describe('Recipe', () => {
     ])
   })
 
-  it('Should be able to calculate the cost of its ingredients', () => {
-    expect(recipe.calculateCost()).to.equal(4166);
+  it.only('Should be able to calculate the cost of its ingredients', () => {
+    recipe.calculateCost(ingredient);
+    expect(recipe.ingredientCost).to.equal(326);
   });
 
 });

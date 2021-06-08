@@ -247,11 +247,12 @@ function displayDirections(event) {
     if (recipe.id === Number(event.target.id)) {
       return recipe;
     }
+
   })
   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
   let cost = recipeObject.calculateCost()
-  let costInDollars = (cost / 100).toFixed(2)
   let returnInstructions = recipeObject.retrieveRecipeInstructions();
+  let costInDollars = (cost / 100).toFixed(2)
   let returnIngredients = recipeObject.retrieveIngredientName();
   console.log(returnIngredients, returnInstructions);
   // What does it mean "all" ??
