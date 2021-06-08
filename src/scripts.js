@@ -191,10 +191,11 @@ function displayDirections(event) {
     if (recipe.id === Number(event.target.id)) {
       return recipe;
     }
+
   })
   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
   let cost = recipeObject.calculateCost()
-  let returnInstructions = recipeObject.findInstructions();
+  let returnInstructions = recipeObject.retrieveRecipeInstructions();
   let costInDollars = (cost / 100).toFixed(2)
   cardArea.classList.add('all');
   cardArea.innerHTML = `<h3>${recipeObject.name}</h3>

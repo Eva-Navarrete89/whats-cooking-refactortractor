@@ -36,10 +36,10 @@ class Recipe {
         if (currentVal.id === ingredient.id) {
           acc = (ingredient.estimatedCostInCents * currentVal.quantity.amount)
         }
-
       })
       return acc;
     }, 0);
+
 
 
 
