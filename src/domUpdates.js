@@ -103,6 +103,33 @@ let domUpdates = {
     }
   },
 
+  displayCardDirections(cardArea, recipeObject, costInDollars, returnInstructions,returnIngredients) {
+    cardArea.classList.add('all');
+    cardArea.innerHTML = `<h3>${recipeObject.name}</h3>
+    <p class='all-recipe-info'>
+    <strong>It will cost: </strong><span class='cost recipe-info'>
+    $${costInDollars}</span><br><br>
+    <strong>You will need: </strong><span class='ingredients recipe-info'></span>
+    <strong>Instructions: </strong><ol><span class='instructions recipe-info'>
+    </span></ol>
+    </p>`;
+
+    let ingredientsSpan = document.querySelector('.ingredients');
+    recipeObject.ingredients.forEach(ingredient => {
+      ingredientsSpan.insertAdjacentHTML('afterbegin', `<ul><li>
+      ${ingredient.quantity.amount.toFixed(2)} ${ingredient.quantity.unit}
+      ${ingredient.name}</li></ul>
+      `)
+    })
+
+    let instructionsSpan = document.querySelector('.instructions');
+    recipeObject.instructions.forEach(instruction => {
+      instructionsSpan.insertAdjacentHTML('beforebegin', `<li>
+      ${instruction.instruction}</li>
+      `)
+    })
+  },
+
   displayCardConditionals(event, favoriteCard, favButton, populateCards, cookbook, displayDirections, addToCook) {
     if (event.target.classList.contains('favorite')) {
       favoriteCard(event);

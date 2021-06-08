@@ -1,6 +1,6 @@
 class Cookbook {
   constructor(data) {
-    this.recipes = data;
+    this.recipes = data.recipesData;
   }
   findRecipe(searchText) {
     //We are iterating over a whole array full of different recipes, each element (recipe) has name("string"), id(number), image(string)  &&&&&&
