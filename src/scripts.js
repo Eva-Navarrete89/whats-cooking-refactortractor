@@ -4,7 +4,7 @@ import './css/styles.scss';
 import domUpdates from './domUpdates';
 // import recipeData from './data/recipes';
 // For ingredientData create a fetch call and assign it to a global variable also for (recipesData?)'
-// import ingredientsData from './data/ingredients';
+import ingredientsData from './data/ingredients';
 // import users from './data/users';
 import { fetchApiCalls } from './apiCalls'
 
@@ -65,12 +65,18 @@ function generateUser() {
 
 
 function recipeData(){
- let recipePromise = fetchApiCalls('recipes')
+  let recipePromise = fetchApiCalls('recipes')
  .then(data => {
    let recipeData = data.recipeData;
 
   let cookbook = new Cookbook(data.recipeData);
-  populateCards(cookbook.recipes);
+  // console
+  populateCards(cookbook.recipesData);
+  addToCook(cookbook.recipes)
+  favoriteCard(cookbook.recipes)
+  viewRecipesToCook(cookbook.recipes)
+  viewFavorites(cookbook.recipes)
+  searchByTags(cookbook.recipes)
     // console.log('ing', recipeData);
  })
 }
@@ -96,7 +102,7 @@ function searchByNameIng() {
 
 //------------------------------------------------------
 /// Function filter recipes by "TAGS" based on (user.favoriteRecipes)
-function searchByTags() {
+function searchByTags(cookbook) {
   preventDefault()
   let checkBoxMatches = [];
   checkBoxes.forEach(checkBox => {
@@ -129,7 +135,7 @@ function searchByTags() {
 
 
 //////////////////////// DOM MANIPULATION ON  ------------ (domUpdates.js)
-function viewFavorites() {
+function viewFavorites(cookbook) {
   domUpdates.displayFavorites(user, cardArea, favButton, populateCards, cookbook);
 
   // if (cardArea.classList.contains('all')) {
@@ -164,7 +170,7 @@ function viewFavorites() {
 }
 
 // Function to display recipes to cook
-function viewRecipesToCook() {
+function viewRecipesToCook(cookbook) {
   domUpdates.displayRecipesToCook(user, cardArea, toCookButton, populateCards, cookbook)
 }
 
@@ -179,7 +185,7 @@ function viewRecipesToCook() {
 // Could be a <p> tags and just supply it rather than this complex (.spli())
 // }
 
-function favoriteCard() {
+function favoriteCard(cookbook) {
   domUpdates.displayFavoriteCard(event, cookbook, favButton, user);
   // let specificRecipe = cookbook.recipes.find(recipe => {
   //   if (recipe.id  === Number(event.target.id)) {
@@ -196,7 +202,7 @@ function favoriteCard() {
   // }
 }
 
-function addToCook() {
+function addToCook(cookbook) {
   domUpdates.addRecipesToCook(event, cookbook, toCookButton, user)
 }
 
@@ -221,82 +227,82 @@ function cardButtonConditionals() {
 
 
 
-////////////////////////// DOM MANIPULATON ON   -------------- (SCRIPT.JS)
-// function displayDirections(event) {
-//     // console.log(user);
-//   let newRecipeInfo = cookbook.recipes.find(recipe => {
-//     if (recipe.id === Number(event.target.id)) {
-//       return recipe;
-//     }
-//   })
-//   let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
-//   let cost = recipeObject.calculateCost()
-//   let costInDollars = (cost / 100).toFixed(2)
-//   let returnInstructions = recipeObject.retrieveRecipeInstructions();
-//   let returnIngredients = recipeObject.retrieveIngredientName();
-//   console.log(returnIngredients, returnInstructions);
-//   /// CALL FUNCTION1 AND FUNCTION2
-//
-//
-//   // MOVE TO DOM UPDATES FILE
-//   cardArea.classList.add('all');
-//   cardArea.innerHTML = `<h3>${recipeObject.name}</h3>
-//   <p class='all-recipe-info'>
-//   <strong>It will cost: </strong><span class='cost recipe-info'>
-//   $${costInDollars}</span><br><br>
-//   <strong>You will need: </strong><span class='ingredients recipe-info'></span>
-//   <strong>Instructions: </strong><ol><span class='instructions recipe-info'>
-//   </span></ol>
-//   </p>`;
-//   ////////////////////////////////////
-//
-//   /// FUNCTION 1
-//
-//
-//   let ingredientsSpan = document.querySelector('.ingredients');
-//   recipeObject.ingredients.forEach(ingredient => {
-//     ingredientsSpan.insertAdjacentHTML('afterbegin', `<ul><li>
-//     ${ingredient.quantity.amount.toFixed(2)} ${ingredient.quantity.unit}
-//     ${ingredient.name}</li></ul>
-//     `)
-//   })
-//
-//
-//   //// FUNCTION  2
-//   let instructionsSpan = document.querySelector('.instructions');
-//   recipeObject.instructions.forEach(instruction => {
-//     instructionsSpan.insertAdjacentHTML('beforebegin', `<li>
-//     ${instruction.instruction}</li>
-//     `)
-//   })
-// }
+//////////////////////// DOM MANIPULATON ON   -------------- (SCRIPT.JS)
+function displayDirections(event) {
+    // console.log(user);
+  let newRecipeInfo = cookbook.recipes.find(recipe => {
+    if (recipe.id === Number(event.target.id)) {
+      return recipe;
+    }
+  })
+  let recipeObject = new Recipe(newRecipeInfo, ingredientsData);
+  let cost = recipeObject.calculateCost()
+  let costInDollars = (cost / 100).toFixed(2)
+  let returnInstructions = recipeObject.retrieveRecipeInstructions();
+  let returnIngredients = recipeObject.retrieveIngredientName();
+  console.log(returnIngredients, returnInstructions);
+  /// CALL FUNCTION1 AND FUNCTION2
 
 
+  // MOVE TO DOM UPDATES FILE
+  cardArea.classList.add('all');
+  cardArea.innerHTML = `<h3>${recipeObject.name}</h3>
+  <p class='all-recipe-info'>
+  <strong>It will cost: </strong><span class='cost recipe-info'>
+  $${costInDollars}</span><br><br>
+  <strong>You will need: </strong><span class='ingredients recipe-info'></span>
+  <strong>Instructions: </strong><ol><span class='instructions recipe-info'>
+  </span></ol>
+  </p>`;
+  ////////////////////////////////////
+
+  /// FUNCTION 1
 
 
+  let ingredientsSpan = document.querySelector('.ingredients');
+  recipeObject.ingredients.forEach(ingredient => {
+    ingredientsSpan.insertAdjacentHTML('afterbegin', `<ul><li>
+    ${ingredient.quantity.amount.toFixed(2)} ${ingredient.quantity.unit}
+    ${ingredient.name}</li></ul>
+    `)
+  })
 
 
-/////// NEW FUNCTION WITH FETCH  ALL
-function displayDirections() {
-  fetchApiCalls('ingredients')
-  .then(data => {
-    console.log('test', data);
-
-    let newRecipeInfo = cookbook.recipes.find(recipe => {
-      if (recipe.id === Number(event.target.id)) {
-        return recipe;
-      }
-    })
-
-    let recipeObject = new Recipe(newRecipeInfo, data.ingredientsData);
-    let cost = recipeObject.calculateCost()
-    let costInDollars = (cost / 100).toFixed(2)
-    let returnInstructions = recipeObject.retrieveRecipeInstructions();
-    let returnIngredients = recipeObject.retrieveIngredientName();
-
-    domUpdates.displayCardDirections(cardArea, recipeObject, costInDollars, returnInstructions, returnIngredients)
+  //// FUNCTION  2
+  let instructionsSpan = document.querySelector('.instructions');
+  recipeObject.instructions.forEach(instruction => {
+    instructionsSpan.insertAdjacentHTML('beforebegin', `<li>
+    ${instruction.instruction}</li>
+    `)
   })
 }
+
+
+
+
+
+
+// /////// NEW FUNCTION WITH FETCH  ALL
+// function displayDirections() {
+//   fetchApiCalls('ingredients')
+//   .then(data => {
+//     console.log('test', data);
+//
+//     let newRecipeInfo = cookbook.recipes.find(recipe => {
+//       if (recipe.id === Number(event.target.id)) {
+//         return recipe;
+//       }
+//     })
+//
+//     let recipeObject = new Recipe(newRecipeInfo, data.ingredientsData);
+//     let cost = recipeObject.calculateCost()
+//     let costInDollars = (cost / 100).toFixed(2)
+//     let returnInstructions = recipeObject.retrieveRecipeInstructions();
+//     let returnIngredients = recipeObject.retrieveIngredientName();
+//
+//     domUpdates.displayCardDirections(cardArea, recipeObject, costInDollars, returnInstructions, returnIngredients)
+//   })
+// }
 
 
 
