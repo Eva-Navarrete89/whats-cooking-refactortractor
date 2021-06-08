@@ -29,7 +29,7 @@ class Recipe {
     }, []);
     return ingredientName;
   }
-
+  
   calculateCost(ingredient) {
     this.ingredientCost = this.ingredients.reduce((acc, currentVal) => {
       ingredient.forEach(ingredient => {
@@ -39,9 +39,6 @@ class Recipe {
       })
       return acc;
     }, 0);
-
-
-
 
 
     // refactor this after WE are badasses and have full functionality on page. ----->reduce!
